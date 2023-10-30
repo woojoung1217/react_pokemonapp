@@ -191,7 +191,7 @@ const DetailPage = () => {
               {pokemon.abilities.map((abilitie) => (
                 <div
                   key={abilitie}
-                  className="text-[0.5rem] text-zinc-100 capitalize"
+                  className="text-[0.5rem] text-zinc-100 capitalize border-l-orange-50"
                 >
                   {abilitie}
                 </div>
