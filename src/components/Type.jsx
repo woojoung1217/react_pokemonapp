@@ -11,6 +11,7 @@ const Type = ({ type, damageValue }) => {
       >
         {type}
       </span>
+      <p></p>
       {damageValue && (
         <span className="bg-zinc-200/40 p-[.125rem] rounded">
           {damageValue}
