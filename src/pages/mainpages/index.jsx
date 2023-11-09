@@ -5,21 +5,22 @@ import PokeCard from "../../components/PokeCard";
 import AutoComplete from "../../components/AutoComplete";
 
 function MainPage() {
-  // allpokemons data
+  /** 모든 포켓몬 데이터를 불러오는 state */
   const [allPokemons, setAllPokemons] = useState([]);
 
   // 실제 보여지는 데이터를 가지고 있는 state
   const [displayedPokemons, setDisplayedPokemons] = useState([]);
+
   // server url
   const url = `https://pokeapi.co/api/v2/pokemon?limit=1008&offset=0`;
   // 한번에 보여지는 포켓몬 수
   const limitNum = 20;
-  const [searchTerm, SetsearchTerm] = useState("");
 
   useEffect(() => {
     fetchPokeData();
   }, []);
 
+  /** 불러온 포켓몬 데이터를 보여주는 데이터로 변환하는 함수 */
   const filterDisplayedPokemonData = (
     allPokemonsData,
     displayedPokemons = []
