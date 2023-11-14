@@ -11,6 +11,7 @@ import { Balance } from "../../assets/Balance";
 import { Vector } from "../../assets/Vector";
 import Type from "../../components/Type";
 import BaseStat from "../../components/BaseStat";
+import DamageRelations from "../../components/DamageRelations";
 
 const DetailPage = () => {
   const [pokemon, setPokemon] = useState();
@@ -54,7 +55,6 @@ const DetailPage = () => {
         };
         setPokemon(formattedPokemonData);
         setIsLoading(false);
-        console.log(formattedPokemonData);
       }
     } catch (error) {
       console.log(error);
@@ -119,7 +119,7 @@ const DetailPage = () => {
   return (
     <article className="flex items-center gap-1 flex-col w-full">
       <div
-        className={`${bg} w-auto h-full flex flex-col z-0 items-center justify-end relative overflow-hidden`}
+        className={`${bg} w-full h-full flex flex-col z-0 items-center justify-end relative overflow-hidden`}
       >
         {pokemon.previous && (
           <Link
@@ -206,7 +206,7 @@ const DetailPage = () => {
 
           <h2 className={`text-base font-semibold ${text}`}>기본 능력치</h2>
 
-          <div className="w-full ">
+          <div className="w-auto">
             <table>
               <tbody>
                 {pokemon.stats.map((stat) => (
@@ -221,12 +221,11 @@ const DetailPage = () => {
             </table>
           </div>
 
-          {pokemon.damage_relations && (
+          {pokemon?.DamageRelations && (
             <div className="w-10/12">
-              <h2 lassName={`text-base text-center font-semibold ${text}`}>
-                데미지 관계
+              <h2 className={`text-base text-center font-semibold ${text}`}>
+                <DamageRelations damages={pokemon.DamageRelations} />
               </h2>
-              데미지
             </div>
           )}
         </section>
