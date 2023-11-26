@@ -1,8 +1,11 @@
 /* eslint-disable */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import Type from "./Type";
 
 const DamageRelations = ({ damages }) => {
   // 랜더시 props 로 받은 데이터를 각 요소를 매핑 하며 함수 실행
+
+  const [damagePokemonForm, setDamagePokemonForm] = useState([]);
   useEffect(() => {
     const arrayDamage = damages.map((damage) =>
       separateObjectBetweenToAndFrom(damage)
@@ -10,10 +13,9 @@ const DamageRelations = ({ damages }) => {
 
     if (arrayDamage.length === 2) {
       const obj = joinDamageRelations(arrayDamage);
-      postDamageValue(obj.from);
+      setDamagePokemonForm(reduceDuplicateValues(postDamageValue(obj.from)));
     } else {
-      // type 한개일 때
-      postDamageValue(arrayDamage[0].from);
+      setDamagePokemonForm(postDamageValue(arrayDamage[0].from));
     }
   }, []);
 
@@ -24,7 +26,34 @@ const DamageRelations = ({ damages }) => {
       no_damage: "0x",
     };
 
-    Object.entries(props);
+    return Object.entries(props).reduce((acc, [keyName, value]) => {
+      const key = keyName;
+      console.log([keyName, value]);
+      const verifiedValue = fliterForUniqueValues(value, duplicateValues[key]);
+
+      return (acc = { [keyName]: verifiedValue, ...acc });
+    }, {});
+  };
+
+  const fliterForUniqueValues = (valueForFlitering, damageValue) => {
+    // valueForFlitering이 배열이 아닌 경우 배열로 변환
+    const valueArray = Array.isArray(valueForFlitering)
+      ? valueForFlitering
+      : Object.values(valueForFlitering);
+
+    return valueArray.reduce((acc, currentValue) => {
+      const { url, name } = currentValue;
+      console.log(url, name);
+
+      // 배열로 받아온 경우에는 바로 사용, 객체로 받아온 경우에는 Object.values로 배열로 변환
+      const accArray = Array.isArray(acc) ? acc : Object.values(acc);
+
+      const filteredAcc = accArray.filter((a) => a.name !== name);
+
+      return filteredAcc.length === accArray.length
+        ? (acc = [currentValue, ...accArray])
+        : (acc = [{ damageValue: damageValue, name, url }, ...filteredAcc]);
+    }, []);
   };
 
   const joinDamageRelations = (props) => {
@@ -59,11 +88,16 @@ const DamageRelations = ({ damages }) => {
         no_damage: "0x",
       };
 
+      // value가 배열인지 확인한 후에 map 호출
+      const mappedValue = Array.isArray(value)
+        ? value.map((i) => ({
+            damageValue: valuesOfKeyName[key],
+            ...i,
+          }))
+        : value;
+
       return (acc = {
-        [keyName]: value.map((i) => ({
-          damageValue: valuesOfKeyName[key],
-          ...i,
-        })),
+        [keyName]: mappedValue,
         ...acc,
       });
     }, {});
@@ -94,7 +128,50 @@ const DamageRelations = ({ damages }) => {
     return result;
   };
 
-  return <div>DamageRelations</div>;
+  // ...
+
+  return (
+    <div className="flex gap-2 flex-col">
+      {damagePokemonForm ? (
+        <>
+          {Object.entries(damagePokemonForm).map(([keyName, value]) => {
+            const key = keyName;
+            const valuesOfKeyName = {
+              double_damage: "Weak",
+              half_damage: "Resistant",
+              no_damage: "Immune",
+            };
+
+            return (
+              <div key={key}>
+                <h3 className="capitalize font-medium text-sm md:text-base text-slate-500 text-center">
+                  {valuesOfKeyName[key]}
+                </h3>
+
+                <div className="flex flex-wrap gap-1 justify-center">
+                  {value.length > 0 ? (
+                    value.map(({ name, url, damageValue }) => (
+                      <Type
+                        type={name}
+                        key={url}
+                        damageValue={damageValue}
+                      ></Type>
+                    ))
+                  ) : (
+                    <Type type={"none"} key={"none"}></Type>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </>
+      ) : (
+        <div></div>
+      )}
+    </div>
+  );
+
+  // ...
 };
 
 export default DamageRelations;
