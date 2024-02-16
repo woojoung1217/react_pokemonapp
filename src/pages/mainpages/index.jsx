@@ -51,6 +51,9 @@ function MainPage() {
           setDisplayedPokemons={setDisplayedPokemons}
         />
       </header>
+      <h1 className="justify-center items-center text-slate-900 bg-slate-500 inline-block text-center">
+        우중스 포켓몬 도감
+      </h1>
       <section className="pt-6 flex flex-col justify-content items-center overflow-auto z-0">
         <div className="flex flex-row flex-wrap gap-[16px] items-center justify-center px-2 max-w-4xl">
           {displayedPokemons.length > 0 ? (
