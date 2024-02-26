@@ -15,4 +15,4 @@ Currently, two official plugins are available:
     "react-router-dom": "^6.16.0"
      "tailwindcss": "^3.3.3",
 
-[미리보기](https://wonderful-treacle-9ce51f.netlify.app/)
+[배포](https://wonderful-treacle-9ce51f.netlify.app/)
